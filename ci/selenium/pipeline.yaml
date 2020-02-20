@@ -1,0 +1,106 @@
+resources:
+- name: git-repo
+  type: git
+  webhook_token: ((webhook_token))
+  source:
+    uri: ((git_repo))
+    branch: ((git_branch))
+
+- name: dev
+  type: cf
+  source:
+    api: ((cf_api))
+    username: ((cf_username))
+    password: ((cf_password))
+    organization: ((cf_org))
+    space: ((cf_space_dev))
+    skip_cert_check: true
+
+- name: prod
+  type: cf
+  source:
+    api: ((cf_api))
+    username: ((cf_username))
+    password: ((cf_password))
+    organization: ((cf_org))
+    space: ((cf_space_prod))
+    skip_cert_check: true
+
+jobs:
+- name: deploy-dev
+  public: true
+  serial: true
+  plan:
+  - get: git-repo
+    trigger: true
+  
+  - task: maven-build
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: maven}
+      inputs:
+        - name: git-repo
+      run:
+        path: mvn
+        args: ["-f", "git-repo/pom.xml", "install"]
+      outputs:
+      - name: build
+        path: git-repo
+
+  - put: dev
+    params:
+      manifest: build/manifest.yml
+      environment_variables:
+        org: ((cf_org))
+
+- name: test
+  public: true
+  serial: true
+  plan:
+  - get: git-repo
+    passed: ["deploy-dev"]
+    trigger: true
+
+  - task: test
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: python, tag: "3"}
+      inputs:
+      - name: git-repo
+      run:
+        path: "git-repo/automatedTesting/test.sh"
+        args: ["git-repo/automatedTesting/requirements.txt", "git-repo/automatedTesting/test_1.py"]
+
+- name: deploy-prod
+  public: true
+  serial: true
+  plan:
+  - get: git-repo
+    passed: ["test"]
+    trigger: true
+
+  - task: maven-build
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: maven}
+      inputs:
+        - name: git-repo
+      run:
+        path: mvn
+        args: ["-f", "git-repo/pom.xml", "install"]
+      outputs:
+      - name: build
+        path: git-repo
+
+  - put: prod
+    inputs: ["build"]
+    params:
+      manifest: build/manifest.yml
+      environment_variables:
+        org: ((cf_org))

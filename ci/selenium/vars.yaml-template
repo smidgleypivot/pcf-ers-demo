@@ -1,0 +1,10 @@
+---
+git_repo: https://github.com/smidgleypivot/pcf-ers-demo
+git_branch: master
+webhook_token: 
+cf_org: wh
+cf_space_dev: dev
+cf_space_prod: prod
+cf_username: concourse
+cf_password: 
+cf_api: https://api.sys.arcadia.cf-app.com
