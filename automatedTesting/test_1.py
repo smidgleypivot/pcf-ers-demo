@@ -5,6 +5,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 import sys
 
+from multiprocessing import Pool
+
 
 def Test(ScreenSize=[]):
 
@@ -40,7 +42,19 @@ def Test(ScreenSize=[]):
     except:
         driver.add_cookie({"name": "zaleniumTestPassed", "value": "false"})
         driver.quit()
+        print ("http://34.77.6.248/dashboard/?q=" + driver.session_id)
         sys.exit("There was an error, please check the logs")
+
     finally:
         driver.add_cookie({"name": "zaleniumTestPassed", "value": "true"})
         driver.quit()
+
+
+
+if __name__ == '__main__':
+    p = Pool(2)
+    p.map(Test, [[800,600],[500,800]])
+
+
+
+
