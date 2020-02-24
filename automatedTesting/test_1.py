@@ -22,7 +22,7 @@ try:
     driver.add_cookie({"name": "zaleniumMessage", "value": "Going to the database page"})
     elem = driver.find_element_by_id("emailAddress")
     elem.send_keys("tester@gopivotalio")
-    elem = driver.find_element_by_id("ssas")
+    elem = driver.find_element_by_id("firstName")
     elem.send_keys("Charles")
     elem = driver.find_element_by_id("lastName")
     elem.send_keys("Wang")
