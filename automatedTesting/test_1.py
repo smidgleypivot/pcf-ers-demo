@@ -12,9 +12,10 @@ def Test(ScreenSize=[]):
        command_executor="http://34.77.6.248/wd/hub",
        desired_capabilities={
                 "browserName": "firefox",
-                "platform": "LINUX"
+                "platform": "LINUX",
+                "accept_untrusted_certs":True
             })
-    print ("Video: "  + driver.session_id)
+    print ("http://34.77.6.248/dashboard/?q="  + driver.session_id)
 
     try:
         driver.implicitly_wait(30)
