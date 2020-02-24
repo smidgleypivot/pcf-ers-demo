@@ -23,9 +23,9 @@ def Test(ScreenSize=[]):
         driver.implicitly_wait(30)
         #driver.maximize_window() # Note: driver.maximize_window does not work on Linux selenium version v2, instead set window size and window position like driver.set_window_position(0,0) and driver.set_window_size(1920,1080)
 
-        driver.get("https://attendees-terrific-lynx.apps.arcadia.cf-app.com/")
+        driver.get("http://attendees-terrific-lynx.apps.arcadia.cf-app.com/")
         driver.set_window_size = (800, 600)
-        driver.get("https://attendees-terrific-lynx.apps.arcadia.cf-app.com/services")
+        driver.get("http://attendees-terrific-lynx.apps.arcadia.cf-app.com/services")
         driver.add_cookie({"name": "zaleniumMessage", "value": "Going to the database page"})
         elem = driver.find_element_by_id("emailAddress")
         elem.send_keys("tester@gopivotalio")
