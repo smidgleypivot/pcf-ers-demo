@@ -23,9 +23,9 @@ try:
     elem = driver.find_element_by_id("emailAddress")
     elem.send_keys("tester@gopivotalio")
     elem = driver.find_element_by_id("firstName")
-    elem.send_keys("Charles")
+    elem.send_keys("Test")
     elem = driver.find_element_by_id("lastName")
-    elem.send_keys("Wang")
+    elem.send_keys("Drone")
 
     elem = driver.find_element_by_xpath("//*[contains(text(), 'Add')]")
     elem.click()
